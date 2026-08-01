@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>다인교육 — 이제는 동탄이 입시의 중심</title>
+<meta name="description" content="동탄에서 끝내는 대치동급. 2026년 9월 19일(토) 다인교육 입시설명회 · 윈터스쿨 설명회 사전등록.">
+<link rel="canonical" href="https://dain-edu.higgsfield.app/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="다인교육 - 이제는 동탄이 입시의 중심">
+<meta property="og:description" content="180평 프리미엄 캠퍼스 · 재수종합/독학재수/고등종합/단과 · 9/19(토) 설명회 사전등록">
+<meta property="og:image" content="https://d8j0ntlcm91z4.cloudfront.net/user_3H245lb09Vz3JVPmrpcF7BEkl7M/hf_20260728_181140_b01a2213-8aeb-4f61-80e0-0b1a33235b09.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://d2ol7oe51mr4n9.cloudfront.net/user_3H245lb09Vz3JVPmrpcF7BEkl7M/430a5d29-7943-4916-98b1-1e1d984beaa5.png">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap">
+
+<!--
+================================================================================
+ 다인교육 랜딩페이지 — 단일 HTML 인수인계본
+ 생성일: 2026-08-02 / 원본: https://dain-edu.higgsfield.app
+
+ [브랜드]
+   Navy #24365A · Deep #10192E · Gold #C0994F · Paper #F7F4EC · Cream #FAF8F3
+   본문 Pretendard / 히어로 제목 Noto Serif KR 900
+
+ [필요 에셋] — 현재는 아래 원본 URL을 직접 참조합니다.
+   자체 서버로 옮길 경우 이 4개 파일을 내려받아 경로만 교체하세요.
+   - https://dain-edu.higgsfield.app/assets/dain-logo-mark.png            (로고)
+   - https://dain-edu.higgsfield.app/assets/world/scene-01.mp4            (히어로 영상 · 데스크톱 1280x720)
+   - https://dain-edu.higgsfield.app/assets/world/scene-01-mobile.mp4     (히어로 영상 · 모바일 640x360)
+   - https://dain-edu.higgsfield.app/assets/world/scene-01-poster.png     (첫 프레임 · 데스크톱)
+   - https://dain-edu.higgsfield.app/assets/world/scene-01-mobile-poster.png (첫 프레임 · 모바일)
+   ※ 포스터는 반드시 해당 영상의 "첫 프레임"이어야 이음매가 보이지 않습니다.
+
+ [작업자 확인 필요]
+   1. 하단 스크립트의 ENDPOINT — 사전등록 접수 API 주소 연결
+   2. 개인정보 처리방침 / 이용약관 링크 추가
+   3. 학원법상 교습비 표시 문구 확인
+   4. GA4 / 네이버 애널리틱스 / 픽셀 삽입
+
+ [주의]
+   html, body 에 overflow-x:hidden 을 주면 position:sticky 가 깨져
+   히어로 스크롤 영상이 동작하지 않습니다. overflow-x:clip 을 유지하세요.
+================================================================================
+-->
+
+<style>
+/* ── reset ── */
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0}
+h1,h2,h3,p,ul,ol,figure,blockquote{margin:0}
+ul,ol{padding:0;list-style:none}
+img,video{display:block;max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+
+/* ── scroll-scrub component ── */
+.scroll-scrub {
+  --ss-progress: 0;
+  position: relative;
+  isolation: isolate;
+  color: var(--ss-ink);
+  background: var(--ss-bg);
+}
+
+.scroll-scrub__stage {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--ss-bg);
+}
+
+.scroll-scrub__media,
+.scroll-scrub__layer,
+.scroll-scrub__picture,
+.scroll-scrub__poster,
+.scroll-scrub__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.scroll-scrub__media {
+  z-index: 0;
+}
+
+.scroll-scrub__layer {
+  margin: 0;
+  overflow: hidden;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.scroll-scrub__layer:first-child {
+  opacity: 1;
+}
+
+.scroll-scrub__poster,
+.scroll-scrub__video {
+  display: block;
+  object-fit: cover;
+  object-position: var(--ss-object-position);
+}
+
+.scroll-scrub__poster {
+  z-index: 0;
+}
+
+.scroll-scrub__video {
+  z-index: 1;
+}
+
+.scroll-scrub__layer[data-video-painted="true"] .scroll-scrub__poster {
+  visibility: hidden;
+}
+
+.scroll-scrub__progress {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: color-mix(in srgb, var(--ss-ink) 14%, transparent);
+  pointer-events: none;
+}
+
+.scroll-scrub__progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--ss-accent);
+  transform: scaleX(var(--ss-progress));
+  transform-origin: left center;
+}
+
+.scroll-scrub__route {
+  position: absolute;
+  z-index: 6;
+  top: clamp(1rem, 3vw, 2rem);
+  right: clamp(1rem, 4vw, 4rem);
+  left: clamp(1rem, 4vw, 4rem);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  pointer-events: auto;
+}
+
+.scroll-scrub__route-button {
+  min-height: 2.75rem;
+  padding: 0.65rem 0.9rem;
+  border: 0;
+  color: var(--ss-muted);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.scroll-scrub__route-button:hover,
+.scroll-scrub__route-button[aria-current="step"] {
+  color: var(--ss-ink);
+}
+
+.scroll-scrub__route-button[aria-current="step"] {
+  text-decoration: underline;
+  text-decoration-color: var(--ss-accent);
+  text-decoration-thickness: 0.15em;
+  text-underline-offset: 0.3em;
+}
+
+.scroll-scrub__route-button:focus-visible {
+  outline: 2px solid var(--ss-accent);
+  outline-offset: 3px;
+}
+
+.scroll-scrub__story {
+  position: relative;
+  z-index: 3;
+  margin-top: -100dvh;
+  pointer-events: none;
+}
+
+.scroll-scrub__chapter,
+.scroll-scrub__connector-band {
+  position: relative;
+}
+
+.scroll-scrub__chapter-pin {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  min-height: 100dvh;
+  padding: clamp(5rem, 9vw, 8rem) clamp(1.25rem, 6vw, 6rem);
+  pointer-events: none;
+}
+
+.scroll-scrub__chapter[data-align="right"] .scroll-scrub__chapter-pin {
+  justify-content: flex-end;
+}
+
+.scroll-scrub__copy {
+  position: relative;
+  width: min(40rem, 48vw);
+  pointer-events: auto;
+}
+
+.scroll-scrub__copy::before {
+  position: absolute;
+  z-index: -1;
+  inset: -3rem -5rem;
+  content: "";
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--ss-bg) 88%, transparent) 0%,
+    color-mix(in srgb, var(--ss-bg) 58%, transparent) 52%,
+    transparent 76%
+  );
+  pointer-events: none;
+}
+
+.scroll-scrub__kicker {
+  max-width: 30ch;
+  margin: 0 0 1rem;
+  color: var(--ss-accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.scroll-scrub__title {
+  max-width: 13ch;
+  margin: 0;
+  color: var(--ss-ink);
+  font: inherit;
+  font-size: clamp(2.75rem, 6vw, 6.75rem);
+  font-weight: 700;
+  line-height: 0.94;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.scroll-scrub__body {
+  max-width: 42ch;
+  margin: 1.5rem 0 0;
+  color: var(--ss-muted);
+  font-size: clamp(1rem, 1.35vw, 1.2rem);
+  line-height: 1.55;
+}
+
+.scroll-scrub__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scroll-scrub__tags li {
+  padding: 0.45rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--ss-ink) 20%, transparent);
+  color: var(--ss-ink);
+  font-size: 0.82rem;
+}
+
+.scroll-scrub__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 860px) {
+  .scroll-scrub__poster,
+  .scroll-scrub__video {
+    object-position: var(--ss-mobile-position);
+  }
+
+  .scroll-scrub__route {
+    right: max(0.75rem, env(safe-area-inset-right));
+    left: max(0.75rem, env(safe-area-inset-left));
+    justify-content: flex-start;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+  }
+
+  .scroll-scrub__route-button {
+    flex: 0 0 auto;
+  }
+
+  .scroll-scrub__chapter-pin,
+  .scroll-scrub__chapter[data-align="right"] .scroll-scrub__chapter-pin {
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 6.5rem max(1.25rem, env(safe-area-inset-right))
+      calc(4rem + env(safe-area-inset-bottom))
+      max(1.25rem, env(safe-area-inset-left));
+  }
+
+  .scroll-scrub__copy {
+    width: min(100%, 36rem);
+  }
+
+  .scroll-scrub__copy::before {
+    inset: -3rem -2rem;
+    background: linear-gradient(
+      to top,
+      var(--ss-bg) 0%,
+      color-mix(in srgb, var(--ss-bg) 82%, transparent) 58%,
+      transparent 100%
+    );
+  }
+
+  .scroll-scrub__title {
+    max-width: 14ch;
+    font-size: clamp(2.3rem, 11vw, 4.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-scrub__chapter {
+    min-height: 100dvh !important;
+  }
+
+  .scroll-scrub__connector-band {
+    display: none;
+  }
+
+  .scroll-scrub__progress span {
+    transition: none;
+  }
+}
+
+/* ── DAIN EDU brand layer ── */
+/* ─── DAIN EDU brand layer ─── */
+/* (font imported via <link> in <head>) */
+:root{--dn-navy:#24365A;--dn-deep:#10192E;--dn-gold:#C0994F;--dn-gold-soft:#D9BE8C;--dn-paper:#F7F4EC;--dn-ink:rgba(23,26,34,.9);--dn-ink-soft:rgba(23,26,34,.6);--dn-line:#E3DCCB;--dn-cream:#FAF8F3}
+.dn-body{font-family:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;letter-spacing:-0.01em;color:var(--dn-ink);background:var(--dn-cream)}
+.dn-serif{font-family:"Noto Serif KR",serif}
+.dn-wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+.dn-nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:linear-gradient(180deg,rgba(16,25,46,.85),rgba(16,25,46,0));backdrop-filter:blur(6px)}
+.dn-nav-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none}
+.dn-nav-brand b{font-size:17px;letter-spacing:-.01em}
+.dn-nav-brand small{display:block;font-size:9px;letter-spacing:.3em;color:var(--dn-gold-soft);border-bottom:1.5px solid var(--dn-gold);padding-bottom:2px}
+.dn-navcta{background:var(--dn-gold);color:#10192E;font-weight:700;font-size:14px;padding:10px 22px;border-radius:999px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease}
+.dn-navcta:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(192,153,79,.45)}
+.dn-sec{padding:96px 0;background:var(--dn-cream)}
+.dn-sec-alt{padding:96px 0;background:#fff}
+.dn-kicker{font-size:12px;letter-spacing:.35em;color:var(--dn-gold);font-weight:700;text-transform:uppercase}
+.dn-h2{font-size:clamp(26px,3.4vw,36px);color:var(--dn-navy);font-weight:700;margin-top:12px;letter-spacing:-.02em;line-height:1.3}
+.dn-sub{color:var(--dn-ink-soft);margin-top:14px;font-size:16.5px}
+.dn-center{text-align:center;margin-bottom:56px}
+.dn-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.dn-pillar{background:#fff;border:1px solid var(--dn-line);border-radius:16px;padding:32px 24px;text-align:center}
+.dn-sec .dn-pillar{background:#fff}
+.dn-pillar em{font-style:normal;font-family:"Noto Serif KR",serif;color:var(--dn-gold);font-size:14px;letter-spacing:.25em}
+.dn-pillar h3{color:var(--dn-navy);font-size:19px;margin:12px 0 8px}
+.dn-pillar p{font-size:14px;color:var(--dn-ink-soft);line-height:1.65}
+.dn-band{background:var(--dn-navy);color:#fff;padding:88px 0}
+.dn-band-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+.dn-band h2{font-size:clamp(25px,3.2vw,33px);line-height:1.4;font-weight:700}
+.dn-band h2 em{font-style:normal;color:var(--dn-gold-soft);font-family:"Noto Serif KR",serif}
+.dn-band p{margin-top:18px;color:rgba(255,255,255,.75);font-size:16px}
+.dn-band ul{list-style:none;margin-top:26px;padding:0}
+.dn-band li{padding:14px 0;border-top:1px solid rgba(255,255,255,.15);font-size:15.5px;display:flex;gap:12px}
+.dn-band li:last-child{border-bottom:1px solid rgba(255,255,255,.15)}
+.dn-band li i{color:var(--dn-gold);font-style:normal;font-weight:700}
+.dn-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.dn-stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:28px 20px;text-align:center}
+.dn-stat b{font-size:30px;color:var(--dn-gold-soft);display:block}
+.dn-stat span{font-size:13px;color:rgba(255,255,255,.6);margin-top:6px;display:block}
+.dn-prog{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.dn-card{background:#fff;border:1px solid var(--dn-line);border-radius:18px;overflow:hidden}
+.dn-card-h{background:var(--dn-navy);color:#fff;padding:20px 26px;display:flex;justify-content:space-between;align-items:center}
+.dn-card-h h3{font-size:18px;margin:0}
+.dn-card-h span{font-size:12px;background:var(--dn-gold);color:#10192E;font-weight:700;padding:4px 14px;border-radius:999px}
+.dn-rows{padding:10px 26px 22px}
+.dn-row{display:flex;gap:18px;padding:14px 0;border-bottom:1px solid var(--dn-line);font-size:15px}
+.dn-row:last-child{border-bottom:none}
+.dn-row b{color:var(--dn-gold);min-width:52px;font-variant-numeric:tabular-nums}
+.dn-perks{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.dn-perk{background:#FAF4E8;border:1px solid #EADFC8;border-radius:16px;padding:30px 24px;text-align:center}
+.dn-perk em{font-style:normal;font-size:11px;letter-spacing:.25em;color:var(--dn-gold);font-weight:700}
+.dn-perk h3{color:var(--dn-navy);margin:12px 0 6px;font-size:18px}
+.dn-perk p{font-size:14px;color:var(--dn-ink-soft)}
+.dn-formsec{background:linear-gradient(180deg,var(--dn-navy),var(--dn-deep));padding:96px 0}
+.dn-formcard{max-width:620px;margin:0 auto;background:#fff;border-radius:20px;padding:44px 40px;box-shadow:0 26px 70px rgba(0,0,0,.4)}
+.dn-formcard h3{color:var(--dn-navy);font-size:22px;text-align:center;margin:0}
+.dn-formnote{text-align:center;font-size:13.5px;color:var(--dn-ink-soft);margin:10px 0 26px}
+.dn-field{margin-bottom:18px}
+.dn-field label{display:block;font-size:13px;font-weight:700;color:var(--dn-navy);margin-bottom:7px}
+.dn-field input,.dn-field select{width:100%;padding:13px 14px;border:1px solid #D8D2C2;border-radius:9px;font-size:15px;font-family:inherit;background:#FCFBF8;box-sizing:border-box}
+.dn-field input:focus,.dn-field select:focus{outline:none;border-color:var(--dn-gold);box-shadow:0 0 0 3px rgba(192,153,79,.16)}
+.dn-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dn-choice input{display:none}
+.dn-choice span{display:block;text-align:center;padding:12px;border:1px solid #D8D2C2;border-radius:9px;font-size:14.5px;cursor:pointer;background:#FCFBF8}
+.dn-choice input:checked+span{border-color:var(--dn-navy);background:var(--dn-navy);color:#fff;font-weight:600}
+.dn-agree{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--dn-ink-soft);margin:18px 0}
+.dn-agree input{margin-top:3px;accent-color:var(--dn-navy)}
+.dn-submit{width:100%;background:var(--dn-navy);color:#fff;font-weight:700;font-size:17px;padding:17px;border:none;border-radius:10px;cursor:pointer;position:relative;overflow:hidden}
+.dn-submit::after{content:"";position:absolute;left:20%;right:20%;bottom:10px;height:2px;background:var(--dn-gold);transform:scaleX(0);transition:transform .25s ease}
+.dn-submit:hover::after{transform:scaleX(1)}
+.dn-submit:disabled{opacity:.6;cursor:wait}
+.dn-done{text-align:center;padding:30px 0}
+.dn-done b{color:var(--dn-navy);font-size:20px;display:block;margin-bottom:10px}
+.dn-privacy{font-size:11.5px;color:#9a917f;margin-top:16px;text-align:center;line-height:1.5}
+.dn-footer{background:var(--dn-deep);color:rgba(255,255,255,.55);padding:46px 0;font-size:13px}
+.dn-footer .dn-wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.dn-footer b{color:rgba(255,255,255,.85);display:block;margin-bottom:8px;font-size:14px}
+.dn-goldline{width:60px;border-top:2px solid var(--dn-gold);margin-bottom:14px}
+@media(max-width:840px){.dn-grid4{grid-template-columns:1fr 1fr}.dn-prog,.dn-band-grid{grid-template-columns:1fr}.dn-perks{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.dn-navcta,.dn-submit::after{transition:none}}
+:root{--dn-paper2:#F7F4EC}
+.dn-flabel{display:block;font-size:13px;font-weight:700;color:var(--dn-navy);margin-bottom:7px}
+.dn-error{color:#C0392B;font-size:13px;margin-bottom:12px}
+.dn-inv{color:#fff}
+.dn-invsoft{color:rgba(255,255,255,.7)}
+.dn-hero-shell{position:relative}
+.dn-hero-logo{position:absolute;top:9vh;left:50%;transform:translateX(-50%);z-index:5;pointer-events:none;text-align:center;filter:drop-shadow(0 6px 28px rgba(0,0,0,.5));animation:dnLogoIn 1.4s ease both}
+.dn-hero-word{color:var(--dn-paper2);font-size:30px;font-weight:700;letter-spacing:.12em;margin:10px 0 2px}
+.dn-hero-sub{color:var(--dn-gold-soft);font-size:12px;letter-spacing:.5em;font-weight:600;display:inline-block;border-bottom:2px solid var(--dn-gold);padding-bottom:6px;margin:0 0 0 .5em}
+@keyframes dnLogoIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@media(max-width:640px){.dn-hero-logo svg{width:100px;height:auto}.dn-hero-word{font-size:24px}}
+@media(prefers-reduced-motion:reduce){.dn-hero-logo{animation:none}}
+
+/* Korean word-level wrapping for the journey title */
+.scroll-scrub__title{word-break:keep-all;overflow-wrap:normal;max-width:22ch !important;font-size:clamp(24px,3.3vw,46px) !important;line-height:1.32 !important;letter-spacing:-0.02em !important}
+.scroll-scrub__body{word-break:keep-all}
+
+/* ─── owner design port (Claude Design edit) ─── */
+.dn-nav{gap:20px;padding:14px 32px;background:linear-gradient(180deg,rgba(16,25,46,.92) 0%,rgba(16,25,46,.62) 60%,rgba(16,25,46,0) 100%);backdrop-filter:blur(10px) saturate(1.1);transition:padding .25s ease,background .25s ease}
+.dn-nav::after{content:"";position:absolute;left:32px;right:32px;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(192,153,79,.55) 22%,rgba(217,190,140,.75) 50%,rgba(192,153,79,.55) 78%,transparent)}
+.dn-nav.is-solid{padding:9px 32px;background:rgba(16,25,46,.94)}
+.dn-navcta{position:relative;display:inline-flex;align-items:center;gap:11px;padding:9px 12px 9px 20px;color:#10192E;overflow:hidden;background:linear-gradient(135deg,#E7CE9A 0%,var(--dn-gold) 46%,#A87F38 100%);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 6px 18px rgba(0,0,0,.28);transition:box-shadow .22s ease,transform .22s ease}
+.dn-navcta::before{content:"";position:absolute;top:0;bottom:0;left:-60%;width:45%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-18deg);transition:left .55s cubic-bezier(.3,.7,.3,1)}
+.dn-navcta:hover{transform:translateY(-1px);box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 10px 26px rgba(192,153,79,.42)}
+.dn-navcta:hover::before{left:120%}
+.dn-navcta .cta-badge{position:relative;font-style:normal;font-weight:700;font-size:11px;letter-spacing:.14em;padding:5px 11px;border-radius:999px;background:rgba(16,25,46,.92);color:var(--dn-gold-soft,#D9BE8C)}
+.dn-navcta .cta-label{position:relative}
+.dn-band h2 em,.dn-band h2 .gold-em{font-style:normal;background:linear-gradient(100deg,#F5E7C8 0%,#D9BE8C 38%,var(--dn-gold) 68%,#A87F38 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dn-band li{padding:16px 0;gap:14px;align-items:flex-start;transition:padding-left .25s ease}
+.dn-band li:hover{padding-left:4px}
+.dn-band li i{position:relative;flex:0 0 auto;width:9px;height:9px;margin-top:8px;border-radius:50%;font-size:0;background:linear-gradient(150deg,#F5E7C8,var(--dn-gold) 55%,#A87F38);box-shadow:0 0 0 3px rgba(192,153,79,.16),0 1px 3px rgba(0,0,0,.4)}
+.dn-stat{position:relative;overflow:hidden;background:linear-gradient(158deg,rgba(255,255,255,.13) 0%,rgba(255,255,255,.05) 42%,rgba(255,255,255,.02) 100%);transition:transform .25s ease,box-shadow .25s ease}
+.dn-stat::before{content:"";position:absolute;top:0;left:22%;right:22%;height:1.5px;background:linear-gradient(90deg,transparent,var(--dn-gold),transparent);opacity:.75}
+.dn-stat:hover{transform:translateY(-3px)}
+.dn-stat b{font-family:"Noto Serif KR",serif;background:linear-gradient(180deg,#F2E3C4 0%,#D9BE8C 46%,#A87F38 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dn-card{box-shadow:0 18px 40px -20px rgba(16,25,46,.28),0 2px 6px rgba(16,25,46,.06);transition:transform .3s cubic-bezier(.22,.7,.3,1),box-shadow .3s ease}
+.dn-card:hover{transform:translateY(-3px);box-shadow:0 28px 56px -22px rgba(16,25,46,.36),0 3px 8px rgba(16,25,46,.08)}
+.dn-card-h{position:relative;background:linear-gradient(150deg,#2E4470 0%,var(--dn-navy) 48%,#182742 100%);overflow:hidden}
+.dn-card-h::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--dn-gold) 20%,#F2E3C4 50%,var(--dn-gold) 80%,transparent)}
+.dn-card-h span{font-family:"Noto Serif KR",serif;background:linear-gradient(135deg,#F0DCB4,var(--dn-gold) 58%,#A87F38);color:#10192E}
+.dn-rows{position:relative}
+.dn-rows::before{content:"";position:absolute;left:32px;top:24px;bottom:34px;width:1px;background:linear-gradient(180deg,rgba(192,153,79,.55),rgba(192,153,79,.12))}
+.dn-row{position:relative;padding-left:26px}
+.dn-row::before{content:"";position:absolute;left:3px;top:23px;width:7px;height:7px;border-radius:50%;background:var(--dn-gold);box-shadow:0 0 0 3px #fff,0 0 0 4px rgba(192,153,79,.28)}
+.dn-row b{font-family:"Noto Serif KR",serif;color:var(--dn-navy)}
+.dn-perk{position:relative;overflow:hidden;background:linear-gradient(168deg,#FFFDF8 0%,#FAF4E8 55%,#F3E9D6 100%);transition:transform .25s ease,box-shadow .25s ease}
+.dn-perk::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--dn-gold) 22%,#F2E3C4 50%,var(--dn-gold) 78%,transparent)}
+.dn-perk:hover{transform:translateY(-4px)}
+.dn-perk em{display:inline-block;padding:5px 13px;border:1px solid rgba(192,153,79,.42);border-radius:999px;background:rgba(255,255,255,.7);color:#8E6C2A;font-size:10.5px}
+.dn-perk h3{font-family:"Noto Serif KR",serif}
+.dn-perk h3::after{content:"";display:block;width:26px;height:2px;margin:12px auto 0;background:linear-gradient(90deg,var(--dn-gold),rgba(192,153,79,.25))}
+.dn-formcard{position:relative;overflow:hidden;background:linear-gradient(178deg,#FFFFFF 0%,#FFFDF8 62%,#FAF6ED 100%)}
+.dn-formcard::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,transparent,var(--dn-gold) 18%,#F2E3C4 50%,var(--dn-gold) 82%,transparent)}
+.dn-formcard h3{font-family:"Noto Serif KR",serif}
+.dn-formcard h3::after{content:"";display:block;width:34px;height:2px;margin:14px auto 0;background:linear-gradient(90deg,var(--dn-gold),rgba(192,153,79,.2))}
+.dn-choice span:hover{border-color:var(--dn-gold);background:#fff}
+.dn-choice input:checked+span{border-color:transparent;background:linear-gradient(150deg,#2E4470,var(--dn-navy) 55%,#182742)}
+.dn-submit{background:linear-gradient(150deg,#2E4470 0%,var(--dn-navy) 48%,#141F38 100%)}
+.dn-submit:hover{transform:translateY(-2px)}
+@media(prefers-reduced-motion:reduce){.dn-navcta,.dn-stat,.dn-card,.dn-perk,.dn-submit{transition:none}}
+.scroll-scrub__kicker{white-space:nowrap;letter-spacing:.28em !important;font-size:clamp(10px,1vw,13px) !important}
+
+.dn-nav-mark{display:block;height:40px;width:auto}
+.scroll-scrub__title{font-family:"Noto Serif KR",serif !important;font-weight:900 !important;letter-spacing:-0.015em !important;line-height:1.3 !important}
+
+/* nav: pin brand left / CTA right on every width */
+.dn-nav{justify-content:space-between !important;flex-wrap:nowrap}
+.dn-nav .dn-nav-brand{margin-right:auto;flex:0 1 auto;min-width:0}
+.dn-nav .dn-navcta{margin-left:auto;flex:0 0 auto;white-space:nowrap}
+@media(max-width:560px){
+  .dn-nav{padding:11px 14px;gap:10px}
+  .dn-nav::after{left:14px;right:14px}
+  .dn-nav-mark{height:32px}
+  .dn-nav-brand{gap:9px}
+  .dn-nav-brand b{font-size:15px}
+  .dn-nav-brand small{font-size:8px;letter-spacing:.26em}
+  .dn-navcta{padding:7px 9px 7px 13px;font-size:12.5px;gap:7px}
+  .dn-navcta .cta-badge{font-size:9.5px;padding:4px 8px;letter-spacing:.1em}
+}
+@media(max-width:380px){
+  .dn-nav-brand small{display:none}
+  .dn-navcta .cta-badge{display:none}
+  .dn-navcta{padding:8px 16px}
+}
+
+/* consent text layout */
+.dn-agree-t{display:block;font-weight:700;color:var(--dn-navy);font-size:13.5px;line-height:1.5}
+.dn-agree-d{display:block;font-style:normal;margin-top:3px;font-size:12px;color:var(--dn-ink-soft);line-height:1.5;text-wrap:pretty}
+.dn-agree-opt{white-space:nowrap;font-size:13px}
+@media(max-width:420px){.dn-agree-opt{white-space:normal;font-size:12.5px}}
+.dn-seatline{display:inline;white-space:nowrap}
+@media(max-width:640px){.dn-seatline{display:block;white-space:normal}}
+
+/* program + why-band line control */
+.dn-rowline{display:inline}
+.dn-whyline{display:block}
+@media(max-width:640px){
+  .dn-rowline{display:block}
+  .dn-whyline{display:block}
+  .dn-row span{word-break:keep-all}
+  .dn-nowrap{white-space:nowrap}
+}
+
+.dn-progline{display:inline}
+@media(max-width:640px){.dn-progline{display:block}}
+
+/* ─── lock horizontal scrolling (mobile) ─── */
+html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}
+#root,main{max-width:100%;overflow-x:clip}
+.dn-body,.dn-body section{max-width:100%;overflow-x:clip}
+.scroll-scrub__routes,.scroll-scrub__nav{overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain;max-width:100%}
+.scroll-scrub__routes::-webkit-scrollbar,.scroll-scrub__nav::-webkit-scrollbar{display:none}
+img,video,svg{max-width:100%}
+@media(max-width:640px){
+  .dn-seatline{white-space:normal}
+  .dn-agree-opt{white-space:normal}
+  .dn-nowrap{white-space:normal}
+  .scroll-scrub__kicker{white-space:normal;word-break:keep-all}
+  .dn-hero-sub{letter-spacing:.34em}
+  .dn-wrap{padding:0 18px}
+}
+.dn-agree-d .dn-chunk{display:inline-block;white-space:nowrap}
+@media(max-width:640px){
+  .dn-agree-d{display:flex;flex-direction:column;gap:2px}
+  .dn-agree-d .dn-sep{display:none}
+}
+
+/* desktop: stat grid fills the left column height */
+@media(min-width:841px){
+  .dn-band-grid{align-items:stretch}
+  .dn-band-grid > div:first-child{display:flex;flex-direction:column;justify-content:center}
+  .dn-stats{height:100%;padding-top:0 !important;grid-template-rows:1fr 1fr;gap:20px}
+  .dn-stat{height:100%;min-height:0;padding:30px 22px}
+  .dn-stat b{font-size:34px}
+  .dn-stat span{font-size:13px;margin-top:10px}
+}
+@media(min-width:841px){
+  .dn-stat{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+}
+.dn-hallline{display:inline}
+@media(max-width:640px){.dn-hallline{display:block}}
+/* safety net: keep the poster underneath so a blanked video never shows bare navy */
+.scroll-scrub__layer[data-video-painted="true"] .scroll-scrub__poster{visibility:visible !important}
+
+</style>
+</head>
+<body class="dn-page">
+<main class="dn-body"><nav class="dn-nav" aria-label="주 메뉴"><a class="dn-nav-brand" href="#top"><img src="https://dain-edu.higgsfield.app/assets/dain-logo-mark.png" alt="다인교육 로고" class="dn-nav-mark"/><span><b>다인교육</b><small>DAIN EDU</small></span></a><a class="dn-navcta" href="#register"><span class="cta-label">사전등록</span><span class="cta-badge">9/19 SAT</span></a></nav><div id="top" class="dn-hero-shell"><section class="scroll-scrub" style="--ss-accent:#C0994F;--ss-bg:#10192E;--ss-ink:#F7F4EC;--ss-muted:#A9B0C4"><div class="scroll-scrub__stage"><div aria-hidden="true" class="scroll-scrub__media"><figure class="scroll-scrub__layer scroll-scrub__layer--scene" data-scroll-scrub-layer="" data-clip="https://dain-edu.higgsfield.app/assets/world/scene-01.mp4" data-clip-mobile="https://dain-edu.higgsfield.app/assets/world/scene-01-mobile.mp4" style="--ss-mobile-position:50% 50%;--ss-object-position:50% 50%"><picture class="scroll-scrub__picture"><source media="(hover: none) and (pointer: coarse), (max-width: 860px)" srcset="https://dain-edu.higgsfield.app/assets/world/scene-01-mobile-poster.png"/><img alt="" class="scroll-scrub__poster" decoding="async" fetchpriority="high" loading="eager" src="https://dain-edu.higgsfield.app/assets/world/scene-01-poster.png"/></picture></figure></div><div aria-hidden="true" class="scroll-scrub__progress"><span></span></div><nav aria-label="Scroll chapters" class="scroll-scrub__route"><button aria-current="step" class="scroll-scrub__route-button" type="button"><span>다인교육</span></button></nav></div><div class="scroll-scrub__story"><article class="scroll-scrub__chapter" data-align="left" data-scroll-scrub-band="" id="dain-journey" style="min-height:320dvh"><div class="scroll-scrub__chapter-pin"><div class="scroll-scrub__copy"><p class="scroll-scrub__kicker">DAIN EDU · DONGTAN GRAND OPEN</p><h1 class="scroll-scrub__title">대치/⁠목동/⁠평촌 최고의 강사진이 동탄에서 함께 합니다</h1><p class="scroll-scrub__body">다인교육과 함께 오늘부터 동탄이 교육의 중심입니다. 지금부터 다인교육의 이야기를 시작합니다.</p><ul class="scroll-scrub__tags"><li>180평 프리미엄 캠퍼스</li><li>재수종합·독학재수·고등·단과</li><li>9/19(토) 설명회</li></ul></div></div></article></div></section></div><section class="dn-sec-alt"><div class="dn-wrap"><div class="dn-center"><p class="dn-kicker">Four Halls</p><h2 class="dn-h2">한 건물에서 완성되는 네 개의 관</h2><p class="dn-sub"><span class="dn-hallline">내신에서 수능까지, 고등부터 N수까지</span> <span class="dn-hallline">— 옮겨 다닐 필요가 없습니다.</span></p></div><div class="dn-grid4"><div class="dn-pillar"><em>壹</em><h3>재수종합관</h3><p>최적화된 커리큘럼과<br/>담임 밀착 관리</p></div><div class="dn-pillar"><em>貳</em><h3>독학재수관</h3><p>1인 1지정석<br/>주간 성적 리포트와 학습 코칭</p></div><div class="dn-pillar"><em>參</em><h3>고등종합관</h3><p>내신, 수능 동시 설계<br/>학교별 맞춤 대비</p></div><div class="dn-pillar"><em>肆</em><h3>단과관</h3><p>과목별 최정예 강사<br/>최고의 단과 라인업</p></div></div></div></section><section class="dn-band"><div class="dn-wrap dn-band-grid"><div><p class="dn-kicker">Why Dain</p><h2>영통·평촌·대치로<br/>나가던 시간을, <em>실력으로.</em></h2><p><span class="dn-whyline">상위권이 학원 때문에 도시를 떠나던 시대를 끝냅니다.</span> <span class="dn-whyline">대치동급 강사진과 시설을 동탄 안에 세웠습니다.</span></p><ul><li><i>●</i> <span>대형 학원 출강 강사진 — 설명회에서 전원 공개</span></li><li><i>●</i> <span>180평 프리미엄 캠퍼스 — 강의동·자습동 분리 설계</span></li><li><i>●</i> <span>담임제 밀착 관리 — 주간 리포트로 학부모와 공유</span></li></ul></div><div class="dn-stats"><div class="dn-stat"><b>180평</b><span>프리미엄 단일 캠퍼스</span></div><div class="dn-stat"><b>4개 관</b><span>재수·독학·고등·단과</span></div><div class="dn-stat"><b>1:1</b><span>지정석 · 담임 관리</span></div><div class="dn-stat"><b>9/19</b><span>그랜드 오픈 설명회</span></div></div></div></section><section class="dn-sec"><div class="dn-wrap"><div class="dn-center"><p class="dn-kicker">September 19 · Saturday</p><h2 class="dn-h2">설명회 프로그램</h2><p class="dn-sub"><span class="dn-progline">오전은 학부모님께, 오후는 학생에게</span> <span class="dn-progline">— 두 번의 자리를 준비했습니다.</span></p></div><div class="dn-prog"><div class="dn-card"><div class="dn-card-h"><h3>오전부 — 학부모 세션</h3><span>10:00</span></div><div class="dn-rows"><div class="dn-row"><b>10:00</b><span>개회 · 다인교육이 그리는 동탄</span></div><div class="dn-row"><b>10:10</b><span><span class="dn-rowline">초청 연사 특강</span> <span class="dn-rowline">— 2027 대입, 달라지는 것은?</span></span></div><div class="dn-row"><b>11:00</b><span>커리큘럼 · 윈터스쿨 1기 발표</span></div><div class="dn-row"><b>11:30</b><span>Q&amp;A · 시설 투어 · 개별 상담 예약</span></div></div></div><div class="dn-card"><div class="dn-card-h"><h3>오후부 — 학생 세션</h3><span>14:00</span></div><div class="dn-rows"><div class="dn-row"><b>14:00</b><span>개회 · 캠퍼스 소개</span></div><div class="dn-row"><b>14:10</b><span class="dn-nowrap">강사진 공개, 커리큘럼 로드맵</span></div><div class="dn-row"><b>14:50</b><span>선배들의 합격 토크 · Q&amp;A</span></div><div class="dn-row"><b>15:20</b><span>시설 투어 · 무료 진단테스트 신청</span></div></div></div></div></div></section><section class="dn-sec-alt" style="padding-top:0"><div class="dn-wrap"><div class="dn-center"><p class="dn-kicker">Benefits</p><h2 class="dn-h2">사전등록 특전</h2></div><div class="dn-perks"><div class="dn-perk"><em>BENEFIT 01</em><h3>프리뷰 투어 우선권</h3><p>오픈 전 시설을 가장 먼저<br/>— 사전등록자 한정 초청</p></div><div class="dn-perk"><em>BENEFIT 02</em><h3>무료 진단테스트</h3><p>참석자 전원, 과목별 정밀 진단<br/>+ 입시 자료집 증정</p></div><div class="dn-perk"><em>BENEFIT 03</em><h3>당일 등록 혜택</h3><p>현장 상담 예약자 한정<br/>— 입학 혜택과 윈터스쿨 우선 배정</p></div></div></div></section><section class="dn-formsec" id="register"><div class="dn-wrap"><div class="dn-center" style="margin-bottom:36px"><p class="dn-kicker">Pre-Registration</p><h2 class="dn-h2 dn-inv">설명회 사전등록</h2><p class="dn-sub dn-invsoft"><span class="dn-seatline">등록 즉시 좌석이 배정되며,</span> <span class="dn-seatline">선착순 300석으로 마감됩니다.</span></p></div><div class="dn-formcard"><h3>9월 19일(토) 좌석 신청</h3><p class="dn-formnote">오전 10시 학부모부 · 오후 2시 학생부</p><form><div class="dn-field"><label for="rf-name">학생 이름</label><input id="rf-name" required="" maxlength="50" placeholder="예) 김다인" name="name"/></div><div class="dn-field"><label for="rf-phone">학부모 연락처</label><input id="rf-phone" type="tel" required="" placeholder="010-0000-0000" name="phone"/></div><div class="dn-field"><label for="rf-grade">학년</label><select id="rf-grade" name="grade" required=""><option value="" disabled="" selected="">선택해 주세요</option><option>예비 재수생 · N수생</option><option>고3</option><option>고2</option><option>고1</option><option>중3 (예비 고1)</option></select></div><div class="dn-field"><span class="dn-flabel">참석 세션</span><div class="dn-choices"><label class="dn-choice"><input type="radio" required="" name="session" value="오전 학부모부"/><span>오전 — 학부모</span></label><label class="dn-choice"><input type="radio" name="session" value="오후 학생부"/><span>오후 — 학생</span></label></div></div><div class="dn-field"><span class="dn-flabel">관심 과정</span><div class="dn-choices"><label class="dn-choice"><input type="radio" required="" name="course" value="재수종합"/><span>재수종합</span></label><label class="dn-choice"><input type="radio" name="course" value="독학재수"/><span>독학재수</span></label><label class="dn-choice"><input type="radio" name="course" value="고등종합"/><span>고등종합</span></label><label class="dn-choice"><input type="radio" name="course" value="윈터스쿨"/><span>윈터스쿨</span></label></div></div><label class="dn-agree"><input type="checkbox" required=""/><span><b class="dn-agree-t">개인정보 수집·이용에 동의합니다.</b><em class="dn-agree-d"><span class="dn-chunk">목적: 설명회 안내·상담</span><span class="dn-sep"> / </span><span class="dn-chunk">항목: 이름·연락처·학년</span><span class="dn-sep"> / </span><span class="dn-chunk">보유: 1년 후 파기</span></em></span></label><label class="dn-agree"><input type="checkbox" name="marketing"/><span class="dn-agree-opt">(선택) 입시 정보 수신에 동의합니다.</span></label><button class="dn-submit" type="submit">사전등록 완료하기</button><p class="dn-privacy">주식회사 다인교육 · 경기 화성시 동탄 메타폴리스로 53, 6층 602·603호</p></form></div></div></section><footer class="dn-footer"><div class="dn-wrap"><div><div class="dn-goldline"></div><b>다인교육 DAIN EDU</b>경기도 화성시 동탄 메타폴리스로 53, 6층 602·603호<br/>주식회사 다인교육</div><div><div class="dn-goldline"></div><b>설명회</b>2026. 9. 19.(토) 오전 10시 · 오후 2시<br/>재수종합 · 독학재수 · 고등종합 · 단과 · 윈터스쿨</div><div><div class="dn-goldline"></div><b>안내</b>교습비 등 상세 내용은 학원 게시 기준을 따릅니다.</div></div></footer></main>
+<script>
+
+/* ============================================================
+   1) 스크롤 스크럽 히어로 (스크롤 위치 = 영상 재생 위치)
+   - .scroll-scrub__stage 가 sticky 로 고정되고,
+     [data-scroll-scrub-band] 의 높이만큼 스크롤하는 동안
+     영상의 currentTime 을 진행률에 맞춰 이동시킵니다.
+   - 주의: html/body 에 overflow-x:hidden 을 주면 sticky 가 깨집니다.
+           반드시 overflow-x:clip 을 사용하세요.
+   ============================================================ */
+(function () {
+  var root = document.querySelector(".scroll-scrub");
+  if (!root) return;
+  var layer = root.querySelector("[data-scroll-scrub-layer]");
+  var band  = root.querySelector("[data-scroll-scrub-band]");
+  if (!layer || !band) return;
+
+  var DESKTOP = layer.getAttribute("data-clip");
+  var MOBILE  = layer.getAttribute("data-clip-mobile");
+  var reduce  = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var isMobile = function () {
+    return window.matchMedia("(hover:none) and (pointer:coarse)").matches
+        || window.matchMedia("(max-width:860px)").matches;
+  };
+
+  var video = null, ready = false, current = 0, target = 0, loadedSrc = null;
+  var start = 0, end = 1, raf = 0;
+
+  function measure() {
+    var r = band.getBoundingClientRect();
+    var y = window.scrollY || window.pageYOffset;
+    start = r.top + y;
+    end   = start + r.height - window.innerHeight;
+    if (end <= start) end = start + 1;
+  }
+
+  function load() {
+    var src = isMobile() && MOBILE ? MOBILE : DESKTOP;
+    if (reduce || !src || loadedSrc === src) return;
+    loadedSrc = src; ready = false;
+    if (video) { video.remove(); video = null; }
+    fetch(src).then(function (r) { return r.blob(); }).then(function (blob) {
+      var v = document.createElement("video");
+      v.className = "scroll-scrub__video";
+      v.muted = true; v.playsInline = true; v.preload = "auto";
+      v.setAttribute("muted", ""); v.setAttribute("playsinline", "");
+      v.src = URL.createObjectURL(blob);
+      v.addEventListener("loadedmetadata", function () { ready = true; }, { once: true });
+      v.addEventListener("seeked", function () { layer.dataset.videoPainted = "true"; }, { once: true });
+      layer.appendChild(v);
+      video = v;
+      /* iOS: 사용자 제스처 이후 한 번 play/pause 해야 프레임이 그려집니다 */
+      var prime = function () { v.play().then(function () { v.pause(); }).catch(function () {}); };
+      window.addEventListener("touchstart", prime, { once: true, passive: true });
+      window.addEventListener("pointerdown", prime, { once: true, passive: true });
+    }).catch(function () { layer.dataset.videoFailed = "true"; });
+  }
+
+  function tick() {
+    var y = window.scrollY || window.pageYOffset;
+    target = Math.min(1, Math.max(0, (y - start) / (end - start)));
+    root.style.setProperty("--ss-progress", String(target));
+    if (video && ready && !video.seeking) {
+      current += (target - current) * 0.2;                 /* 부드럽게 따라가기 */
+      var t = Math.min(current, 0.999) * (video.duration || 1);
+      if (Math.abs(video.currentTime - t) > (isMobile() ? 0.02 : 0.008)) {
+        try { video.currentTime = t; } catch (e) {}
+      }
+    }
+    raf = requestAnimationFrame(tick);
+  }
+
+  measure(); load(); raf = requestAnimationFrame(tick);
+  window.addEventListener("resize", function () { measure(); load(); });
+  window.addEventListener("orientationchange", measure);
+  window.addEventListener("load", measure);
+})();
+
+/* ============================================================
+   2) 상단 내비게이션 — 스크롤 시 배경 채우기
+   ============================================================ */
+(function () {
+  var nav = document.querySelector(".dn-nav");
+  if (!nav) return;
+  var onScroll = function () {
+    nav.classList.toggle("is-solid", (window.scrollY || 0) > 40);
+  };
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+})();
+
+/* ============================================================
+   3) 사전등록 폼
+   ★ 작업자 확인 필요: ENDPOINT 를 실제 접수 API 로 교체하세요.
+     (미설정 시 폼은 제출되지 않고 안내 문구만 표시됩니다)
+   ============================================================ */
+(function () {
+  var ENDPOINT = "";              /* 예: "/api/register" */
+  var form = document.querySelector("#register form");
+  if (!form) return;
+  var btn = form.querySelector(".dn-submit");
+  var msg = document.createElement("p");
+  msg.className = "dn-formmsg";
+  msg.style.cssText = "margin-top:14px;text-align:center;font-size:14px";
+  form.appendChild(msg);
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var data = Object.fromEntries(new FormData(form).entries());
+    if (!/^01[0-9][0-9-]{7,11}$/.test(String(data.phone || ""))) {
+      msg.style.color = "#B4453C";
+      msg.textContent = "연락처 형식을 확인해 주세요. (예: 010-0000-0000)";
+      return;
+    }
+    if (!ENDPOINT) {
+      msg.style.color = "#B4453C";
+      msg.textContent = "접수 서버가 아직 연결되지 않았습니다. (ENDPOINT 설정 필요)";
+      return;
+    }
+    btn.disabled = true; btn.textContent = "전송 중…";
+    fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    }).then(function (r) {
+      if (!r.ok) throw new Error();
+      form.reset();
+      msg.style.color = "#2E7D5B";
+      msg.textContent = "사전등록이 완료되었습니다. 안내 문자를 보내드리겠습니다.";
+    }).catch(function () {
+      msg.style.color = "#B4453C";
+      msg.textContent = "전송에 실패했습니다. 잠시 후 다시 시도해 주세요.";
+    }).finally(function () {
+      btn.disabled = false; btn.textContent = "사전등록 완료하기";
+    });
+  });
+})();
+
+</script>
+</body>
+</html>
